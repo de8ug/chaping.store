@@ -17,7 +17,7 @@ import store from './store'
 import axios from "axios";
 import App from './App.vue'
 Vue.config.productionTip = true
-axios.defaults.baseURL = 'http://192.168.1.7:8888'  // in docker net
+axios.defaults.baseURL = 'http://118.24.94.243:8888'  // in docker net
 
 new Vue({
   router,
