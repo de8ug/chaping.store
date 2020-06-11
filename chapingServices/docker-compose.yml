@@ -4,11 +4,11 @@ services:
   chaping-mongo:
     # build the image from Dockerfile
     build:
-      context: ${PWD}/mongo
+      context: ./mongo
     # bind mount volume for MongoDB documents
     volumes:
-      - $PWD/mongo/data:/data/db
-      - $PWD/mongo/app:/var/www/html
+      - ./mongo/data:/data/db
+      - ./mongo/app:/var/www/html
     expose:
       - "27017"
     environment:
