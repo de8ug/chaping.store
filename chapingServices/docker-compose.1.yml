@@ -1,0 +1,35 @@
+version: "3.2"
+
+services:
+  chaping-mongo:
+    # build the image from Dockerfile
+    build:
+      context: ${PWD}/mongo
+
+    # bind mount volume for MongoDB documents
+    volumes:
+      - $PWD/mongo/data:/data/db
+      - $PWD/mongo/app:/var/www/html
+
+    ports:
+      - "27017:27017"
+
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+    restart: always
+    
+  redis:
+    restart: always
+    image: redis
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+  
+
+    

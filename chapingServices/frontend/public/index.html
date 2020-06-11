@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+
+    <!-- CND -->
+    <!-- dev need comment start -->
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.runtime.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-router/3.0.3/vue-router.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.4.5/theme-chalk/index.css">
+    <script src="https://cdn.bootcss.com/element-ui/2.4.5/index.js"></script>
+    <!-- dev need comment end -->
+
+  <script src="https://cdn.bootcss.com/vuex/3.0.1/vuex.min.js"></script>
+  <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+  <!-- echarts -->
+  <script src="https://cdn.bootcss.com/echarts/4.2.1/echarts.min.js"></script>
+  <script src="https://cdn.bootcss.com/echarts/4.2.1/echarts.common.min.js"></script>
+  <!-- vcharts -->
+  <!-- need wordcloud -->
+  <script src="https://de8ug.gitee.io/pythonradio/assets/js/echarts-wordcloud.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/v-charts/lib/index.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/v-charts/lib/style.min.css">
+  <script type="text/javascript">
+    function browserRedirect() {
+             var sUserAgent = navigator.userAgent.toLowerCase();
+             if (/ipad|iphone|midp|rv:1.2.3.4|ucweb|android|windows ce|windows mobile/.test(sUserAgent)) {
+                 //跳转移动端页面
+                 alert('为了更好地显示，请在电脑端打开本网页')
+             } 
+            //  else {
+            //      //跳转pc端页面
+            //      window.location.href="http://f.jcngame.com/fanfan20171208//fanmai/index.html";
+            //  }
+         }
+    browserRedirect(); 
+  </script>
+    <title>差评分析助手</title>
+    </head>
+  <body>
+    <noscript>
+      <strong>网站似乎出现点问题，可以找DE8UG反馈</strong>
+      <a href="https://de8ug.vip">https://de8ug.vip</a>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

@@ -1,0 +1,53 @@
+version: "3.2"
+
+services:
+  chaping-mongo:
+    # build the image from Dockerfile
+    build:
+      context: ${PWD}/mongo
+    # bind mount volume for MongoDB documents
+    volumes:
+      - $PWD/mongo/data:/data/db
+      - $PWD/mongo/app:/var/www/html
+    expose:
+      - "27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+    restart: always
+    
+  redis:
+    restart: always
+    image: redis
+    expose:
+      - "6379"
+
+  rabbitmq:
+    image: rabbitmq
+    restart: always
+    expose:
+      - "5672"
+
+  backend:
+    restart: always
+    build: ./backend
+    command: sh start.sh
+    env_file: ./backend/secrets.env
+    expose:
+      - "5000"
+    links:
+      - redis:redis
+      - rabbitmq
+      - chaping-mongo
+  
+  nginx:
+    restart: always
+    build: ./frontend
+    ports:
+      - "8888:80"
+    volumes:
+      - ./logs:/var/log/nginx
+    links:
+      - backend
+
+    
