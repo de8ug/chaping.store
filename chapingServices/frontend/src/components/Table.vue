@@ -116,12 +116,17 @@ const statusApi = '/api/v1/status'
         }).catch(err => {
           console.log(err);
         })
-        // [{ text: '成功', value: '成功' }, { text: '失败', value: '失败' }]
-        this.filterList.forEach(this.makeFilterList);
-        this.filterList = [...new Set(this.filterList)]
+        this.makeFilterList()
       },
-      makeFilterList(item, index, arr){
-        arr[index] = { text: item.statusText, value: item.statusText }
+      makeFilterList(){
+        // [{ text: '成功', value: '成功' }, { text: '失败', value: '失败' }]
+        for (let item of this.tableData) {
+          this.filterList.push(item.statusText);
+        }
+        this.filterList = [...new Set(this.filterList)]
+        for (let item of this.filterList) {
+          this.filterList.push({ text: item, value: item });
+        }
       },
       start() {
         this.$store.dispatch('changeStep', 3)
