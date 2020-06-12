@@ -57,7 +57,7 @@ class Downloader:
         self.timeout = timeout
 
     def download(self, url, is_json=False):
-        logger.info('下载页面:', url)
+        logger.info('下载页面:' + url)
         self.throttle.wait(url)
         try:
             response = requests.get(url, headers=self.headers, proxies=self.proxies, timeout=self.timeout)
