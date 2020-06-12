@@ -33,6 +33,8 @@ services:
     build: ./backend
     command: sh start.sh
     env_file: ./backend/secrets.env
+    volumes:
+      - ./logs:/code/logs
     expose:
       - "5000"
     links:
@@ -58,6 +60,8 @@ services:
     links:
       - redis
     environment:
+
+
       db_type: REDIS
       db_host: redis
       db_port: 6379

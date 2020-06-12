@@ -21,8 +21,9 @@ from .task import create_task
 from .headers import get_header_ua
 from .timeit import DecoTime
 from .status import *  # 确认一下啥时候用*
+from ..settings import de8ug_log
 
-
+logger = de8ug_log()
 
 class Throttle:
     """阀门类，对相同域名的访问添加延迟时间，避免访问过快
@@ -56,12 +57,13 @@ class Downloader:
         self.timeout = timeout
 
     def download(self, url, is_json=False):
-        print('下载页面:', url)
+        logger.info('下载页面:', url)
         self.throttle.wait(url)
         try:
             response = requests.get(url, headers=self.headers, proxies=self.proxies, timeout=self.timeout)
-            print(response.status_code)
+            logger.info(response.status_code)
             if not os.path.exists('response.html'):  # save one file to check
+                logger.info('writing temp html')
                 with open('response.html', 'w') as f:
                     f.write(response.text)
 
@@ -121,6 +123,7 @@ class Recorder:
         db = self.db_client[db_name]
         collection = db[collection_name]
         try:
+            logger.info('writing mongo db')
             collection.drop()  # clear first
             ret = collection.insert_many(all_list)
             if ret:
@@ -146,7 +149,7 @@ class ItemCommentSpider:
         self.result = {'_id': task_id, 'status':STATUS_READY, 'statusText':'准备中'}
         
         self.download = Downloader(headers, num_retries, proxies, delay, timeout)
-
+        logger.info(f'init item spider by {task_id}')
             
     def get_comment_by_json(self, url):
         # http://sclub.jd.com/comment/productPageComments.action?productId=6946647&score=0&sortType=5&page=0&pageSize=10&isShadowSku=0&fold=1
@@ -160,6 +163,7 @@ class ItemCommentSpider:
 
         data_list = []
         if not isinstance(data, dict):
+            logger.error(f'爬取出错，内容为空 {self.task_id}')
             self.result['status'] = STATUS_CRAWLING_ERROR
             self.result['statusText'] = '爬取出错，内容为空'
             self.status.save_status(self.task_id, self.result)

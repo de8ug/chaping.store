@@ -46,7 +46,7 @@ def run_download(task_list, db_name, save_type='mongodb'):
     
     try:
         client = pymongo.MongoClient(**mongo_params)
-        print('run_download with celery...\n')
+        logger.info('run_download with celery...\n')
         download_all(task_list, save_type, client, db_name)
     except Exception as e:
         print(e)
@@ -67,7 +67,7 @@ class TaskApi(Resource):
         url = args['url']
 
         token = create_token_by_url(url)
-        logger.debug(url)
+        logger.info(url)
         result = {'status': 0, 'statusText': '创建成功', 'token': token}
 
         # save token and hot words
@@ -91,7 +91,7 @@ class TaskApi(Resource):
             # 执行异步任务
             # 测试可以少一点
             # sku_list = sku_list[:5]
-            print('开始异步执行任务...')
+            logger.info('开始异步执行任务...')
             run_download.delay(sku_list, db_name='chaping-' + token)
         else:
             result['status'] = 1
