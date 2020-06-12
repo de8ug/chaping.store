@@ -41,8 +41,8 @@
         align="left"
         prop="statusText"
         label="标签"
-        width="100"
-        :filters="[{ text: '成功', value: '成功' }, { text: '失败', value: '失败' }]"
+        width="250"
+        :filters="filterList"
         :filter-method="filterTag"
         filter-placement="bottom-end">
         <template slot-scope="scope">
@@ -64,6 +64,7 @@ const statusApi = '/api/v1/status'
     data() {
       return {
         tableData: [],
+        filterList: [],
         taskCount: sessionStorage.getItem('token-count'),
         percent: 0,
         countSuccess: 0,
@@ -115,6 +116,12 @@ const statusApi = '/api/v1/status'
         }).catch(err => {
           console.log(err);
         })
+        // [{ text: '成功', value: '成功' }, { text: '失败', value: '失败' }]
+        this.filterList.forEach(this.makeFilterList);
+        this.filterList = [...new Set(this.filterList)]
+      },
+      makeFilterList(item, index, arr){
+        arr[index] = { text: item.statusText, value: item.statusText }
       },
       start() {
         this.$store.dispatch('changeStep', 3)
