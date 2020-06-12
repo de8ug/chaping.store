@@ -229,7 +229,16 @@ def get_proxy():
 def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
     headers = {
         'User-agent': get_header_ua(),
-        "referer": f"https://item.jd.com/{task_id}.html"
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "Connection": "keep-alive",
+        "cache-control": "max-age=0",
+        "dnt": "1",
+        "referer": "https://www.jd.com/allSort.aspx",
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "same-site",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": 1"
         } 
     # ADD proxy
     proxy = get_proxy().get("proxy")

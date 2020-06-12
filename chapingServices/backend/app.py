@@ -85,10 +85,6 @@ class TaskApi(Resource):
         if sku_list:
             result['sku_list'] = sku_list  # SAVE FOR FRONT USE
 
-            # check chaping status
-            if status.show_all(f'{token}*'):
-                return result, 200  # 这个token任务已经执行过，有效期内，直接返回
-
             # 执行异步任务
             # 测试可以少一点
             # sku_list = sku_list[:5]
