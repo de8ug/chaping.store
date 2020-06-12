@@ -119,12 +119,13 @@ const statusApi = '/api/v1/status'
         this.makeFilterList()
       },
       makeFilterList(){
+        let tempList = []
         // [{ text: '成功', value: '成功' }, { text: '失败', value: '失败' }]
         for (let item of this.tableData) {
-          this.filterList.push(item.statusText);
+          tempList.push(item.statusText);
         }
-        this.filterList = [...new Set(this.filterList)]
-        for (let item of this.filterList) {
+        tempList = [...new Set(tempList)]
+        for (let item of tempList) {
           this.filterList.push({ text: item, value: item });
         }
       },

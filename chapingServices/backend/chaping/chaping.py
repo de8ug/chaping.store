@@ -21,9 +21,11 @@ from .task import create_task
 from .headers import get_header_ua
 from .timeit import DecoTime
 from .status import *  # 确认一下啥时候用*
-from .utils import de8ug_log
+from .utils import de8ug_log, get_proxy, delete_proxy
+
 
 logger = de8ug_log()
+
 
 class Throttle:
     """阀门类，对相同域名的访问添加延迟时间，避免访问过快
@@ -61,20 +63,22 @@ class Downloader:
         logger.info('下载页面:' + url)
         self.throttle.wait(url.split('/')[2])  # only wait domain url
         # cookies = {'cart-main': '""', '3AB9D23F7A4B3C9B': 'UFVRVJZK52IBRYBAMXRK2BB6CXKEOJ6EOGWRRJ34MO4TVTNDNXLJDWMVLVU4ZU443777FWZYB4FMBGYLI3W6HPXUBM', '__jda': '122270672.15915837512841273885830.1591583751.1591618309.1591950695.3', '__jdb': '122270672.2.15915837512841273885830|3.1591950695', '__jdc': '122270672', '__jdu': '15915837512841273885830', '__jdv': '122270672|direct|-|none|-|1591583751285', 'areaId': '1', 'cn': '0', 'ipLoc-djd': '1-2810-0-0', 'shshshfp': 'd8992e8bfebfe3c7a8032e3280551df5', 'shshshfpa': '24132765-f864-8ff0-f471-63c3d8b9a6a7-1591583752', 'shshshfpb': 'aruh0RdIRf4%2FPER%2FFZuxk0A%3D%3D', 'user-key': '0d65262e-f79f-48bd-bb6b-f8b6d1c7b8bb', 'wlfstk_smdl': 'mxmyvw8xipnlb9sqobzo91nc2fhk4snr', 'o2-webp': 'true', 'csn': '2', 'cud': '5a6f7aa08524943733422b52b3694f7d', 'cvt': '3', 'search_uuid': '50817507-eb52-48f4-8583-ab53586663db', 'UM_distinctid': '17293d86108766-0def340fcd9668-1b386257-1aeaa0-17293d86109c2d', 'JSESSIONID': '99FD306A7A7996B8206BF6856A2EF598.s1', '4qkvs9tyc7mc798e05815919506944982def': '62', '_c_id': 'ma724nleokg2bgcpne91591950694498a0zf', '_s_id': '4qkvs9tyc7mc798e05815919506944982def', '_t': 'fLEuJHDASFtzjkXZNtHuMAo6Az444DAOdm9mnLYfUd0=', 'alc': 'E9n+gTusBHGnP9RcLicpyA==', 'QRCodeKey': 'AAEAIFij9o7FEY9HoII7tXO-ZSADg4gdCztj2hINB76TPMk6', 'CNZZDATA1274300181': '1031549518-1591617385-%7C1591617385'}
+        proxy = get_proxy().get("proxy")
+        logger.info(f'!!use proxy:{proxy}')
+
+        proxies = {"http": "http://{}".format(proxy)}
         try:
             response = requests.get(url, headers=self.headers, 
-                                    proxies=self.proxies, 
+                                    proxies=proxies, 
                                     timeout=self.timeout,
                                     )
             logger.info(f'response:{response.status_code}, <{response.text[:20]}>')
             
             # 返回空数据，更改proxy，重试，这个比cookie重要
-            if not response.text:  
-                proxy = get_proxy().get("proxy")
-                self.proxies = {"http": "http://{}".format(proxy)}
-                if self.num_retries > 0:
-                    logger.info(f'!!update proxy:{proxy}')
+            if not response.text and self.num_retries > 0:
+                    logger.info(f'!!delete & update proxy:{proxy}')
                     logger.info(f'！！重试->{self.num_retries}>>>>>')
+                    delete_proxy(proxy)
                     self.num_retries -= 1
                     html = self.download(url, is_json)
 
@@ -147,7 +151,7 @@ class Recorder:
 class ItemCommentSpider:
     """抓取商品评价信息
     """
-    def __init__(self, headers=None, num_retries=15, proxies=None, delay=2, timeout=30, task_id=None, token=''):
+    def __init__(self, headers=None, num_retries=8, proxies=None, delay=2, timeout=30, task_id=None, token=''):
         self.headers = headers
         self.num_retries = num_retries
         self.proxies = proxies
@@ -234,8 +238,6 @@ class ItemCommentSpider:
 
         return self.result
 
-def get_proxy():
-    return requests.get("http://proxy_pool:5010/get/").json()
 
 def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
     headers = {
@@ -251,15 +253,10 @@ def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
         "sec-fetch-user": "?1",
         "upgrade-insecure-requests": "1"
         } 
-    # ADD proxy
-    proxy = get_proxy().get("proxy")
-    proxies = {"http": "http://{}".format(proxy)}
-    logger.info(f'-> with proxy: {proxy}')
 
     delay = random.randint(5, 10)  # jd need more time
     # spider = ItemCommentSpider(headers=headers, delay=delay, task_id=task_id, token=db_name)
     spider = ItemCommentSpider(headers=headers, 
-                                proxies=proxies,
                                 delay=delay, 
                                 task_id=task_id, 
                                 token=db_name.split('-')[-1]) # token根据db_name进行截取:db_name-token -> token

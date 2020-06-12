@@ -2,6 +2,8 @@ import hashlib
 import string
 import random
 
+import requests
+
 
 def create_token_by_url(url, num=6):
     return hashlib.md5(url.encode()).hexdigest()[:num]
@@ -11,6 +13,12 @@ def create_token(num=6):
     str_from = string.ascii_letters + string.digits
     return ''.join([random.choice(str_from) for _ in range(num)])
 
+# proxy
+def get_proxy():
+    return requests.get("http://proxy_pool:5010/get/").json()
+
+def delete_proxy(proxy):
+    requests.get("http://proxy_pool:5010/delete/?proxy={}".format(proxy))
 
 # log
 import logging
