@@ -215,16 +215,24 @@ class ItemCommentSpider:
 
         return self.result
 
+def get_proxy():
+    return requests.get("http://proxy_pool:5010/get/").json()
 
 def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
     headers = {
         'User-agent': get_header_ua(),
         "referer": f"https://item.jd.com/{task_id}.html"
         } 
+    # ADD proxy
+    proxy = get_proxy().get("proxy")
 
     delay = random.randint(2,8)
     # spider = ItemCommentSpider(headers=headers, delay=delay, task_id=task_id, token=db_name)
-    spider = ItemCommentSpider(headers=headers, delay=delay, task_id=task_id, token=db_name.split('-')[-1]) # token根据db_name进行截取:db_name-token -> token
+    spider = ItemCommentSpider(headers=headers, 
+                                proxies={"http": "http://{}".format(proxy)},
+                                delay=delay, 
+                                task_id=task_id, 
+                                token=db_name.split('-')[-1]) # token根据db_name进行截取:db_name-token -> token
 
     url = 'https://sclub.jd.com/comment/productPageComments.action?productId=' + task_id + '&score=1&sortType=5&page={}&pageSize=10&isShadowSku=0&fold=1'
     # ret = spider.get_comment_by_json(url)

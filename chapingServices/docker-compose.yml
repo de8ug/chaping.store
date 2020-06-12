@@ -50,4 +50,16 @@ services:
     links:
       - backend
 
+  proxy_pool:
+    restart: always
+    image: jhao104/proxy_pool
+    expose:
+      - "5010"
+    links:
+      - redis
+    environment:
+      db_type: REDIS
+      db_host: redis
+      db_port: 6379
+
     
