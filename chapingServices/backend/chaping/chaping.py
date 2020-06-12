@@ -66,18 +66,16 @@ class Downloader:
                                     proxies=self.proxies, 
                                     timeout=self.timeout,
                                     )
-            logger.info(f'response:{response.status_code}, {response.text[:20]}')
+            logger.info(f'response:{response.status_code}, <{response.text[:20]}>')
             
             # 返回空数据，更改proxy，重试，这个比cookie重要
             if not response.text:  
                 proxy = get_proxy().get("proxy")
-                proxies = {"http": "http://{}".format(proxy)}
+                self.proxies = {"http": "http://{}".format(proxy)}
                 if self.num_retries > 0:
-                    response = requests.get(url, headers=self.headers, 
-                                    proxies=proxies, 
-                                    timeout=self.timeout,
-                                    )
-                    logger.info(f'！！重试->{self.num_retries}:response:{response.status_code}, {response.text[:20]}')
+                    html = self.download(url)
+                    logger.info(f'!!update proxy:{proxy}')
+                    logger.info(f'！！重试->{self.num_retries}:response:{response.status_code}, <{response.text[:20]}>')
                     self.num_retries -= 1
 
             if response.status_code == 200 and response.content:
@@ -256,7 +254,7 @@ def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
     # ADD proxy
     proxy = get_proxy().get("proxy")
     proxies = {"http": "http://{}".format(proxy)}
-    logger.info(f'-> download {task_id} with proxy: {proxy}')
+    logger.info(f'-> with proxy: {proxy}')
 
     delay = random.randint(5, 10)  # jd need more time
     # spider = ItemCommentSpider(headers=headers, delay=delay, task_id=task_id, token=db_name)

@@ -22,6 +22,7 @@
         </el-row>
     <el-table
         :data="tableData"
+        stripe
         style="width: 100%">
         
         <el-table-column
@@ -30,11 +31,13 @@
         width="180">
         </el-table-column>
         <el-table-column
+        align="center"
         prop="status"
         label="状态值"
         >
         </el-table-column>
         <el-table-column
+        align="left"
         prop="statusText"
         label="标签"
         width="100"
