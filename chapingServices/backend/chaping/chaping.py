@@ -147,7 +147,7 @@ class Recorder:
 class ItemCommentSpider:
     """抓取商品评价信息
     """
-    def __init__(self, headers=None, num_retries=5, proxies=None, delay=2, timeout=30, task_id=None, token=''):
+    def __init__(self, headers=None, num_retries=15, proxies=None, delay=2, timeout=30, task_id=None, token=''):
         self.headers = headers
         self.num_retries = num_retries
         self.proxies = proxies
