@@ -55,7 +55,7 @@ services:
   proxy_pool:
     restart: always
     image: jhao104/proxy_pool
-    expose:
+    ports:
       - "5010:5010"
     links:
       - redis
