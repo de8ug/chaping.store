@@ -21,7 +21,6 @@
 
         </el-row>
     <el-table
-        ref="filterTable"
         :data="tableData"
         style="width: 100%">
         
@@ -33,7 +32,7 @@
         <el-table-column
         prop="status"
         label="状态值"
-        :formatter="formatter">
+        >
         </el-table-column>
         <el-table-column
         prop="statusText"

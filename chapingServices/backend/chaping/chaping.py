@@ -60,12 +60,12 @@ class Downloader:
     def download(self, url, is_json=False):
         logger.info('下载页面:' + url)
         self.throttle.wait(url.split('/')[2])  # only wait domain url
-        cookies = {'cart-main': '""', '3AB9D23F7A4B3C9B': 'UFVRVJZK52IBRYBAMXRK2BB6CXKEOJ6EOGWRRJ34MO4TVTNDNXLJDWMVLVU4ZU443777FWZYB4FMBGYLI3W6HPXUBM', '__jda': '122270672.15915837512841273885830.1591583751.1591618309.1591950695.3', '__jdb': '122270672.2.15915837512841273885830|3.1591950695', '__jdc': '122270672', '__jdu': '15915837512841273885830', '__jdv': '122270672|direct|-|none|-|1591583751285', 'areaId': '1', 'cn': '0', 'ipLoc-djd': '1-2810-0-0', 'shshshfp': 'd8992e8bfebfe3c7a8032e3280551df5', 'shshshfpa': '24132765-f864-8ff0-f471-63c3d8b9a6a7-1591583752', 'shshshfpb': 'aruh0RdIRf4%2FPER%2FFZuxk0A%3D%3D', 'user-key': '0d65262e-f79f-48bd-bb6b-f8b6d1c7b8bb', 'wlfstk_smdl': 'mxmyvw8xipnlb9sqobzo91nc2fhk4snr', 'o2-webp': 'true', 'csn': '2', 'cud': '5a6f7aa08524943733422b52b3694f7d', 'cvt': '3', 'search_uuid': '50817507-eb52-48f4-8583-ab53586663db', 'UM_distinctid': '17293d86108766-0def340fcd9668-1b386257-1aeaa0-17293d86109c2d', 'JSESSIONID': '99FD306A7A7996B8206BF6856A2EF598.s1', '4qkvs9tyc7mc798e05815919506944982def': '62', '_c_id': 'ma724nleokg2bgcpne91591950694498a0zf', '_s_id': '4qkvs9tyc7mc798e05815919506944982def', '_t': 'fLEuJHDASFtzjkXZNtHuMAo6Az444DAOdm9mnLYfUd0=', 'alc': 'E9n+gTusBHGnP9RcLicpyA==', 'QRCodeKey': 'AAEAIFij9o7FEY9HoII7tXO-ZSADg4gdCztj2hINB76TPMk6', 'CNZZDATA1274300181': '1031549518-1591617385-%7C1591617385'}
+        # cookies = {'cart-main': '""', '3AB9D23F7A4B3C9B': 'UFVRVJZK52IBRYBAMXRK2BB6CXKEOJ6EOGWRRJ34MO4TVTNDNXLJDWMVLVU4ZU443777FWZYB4FMBGYLI3W6HPXUBM', '__jda': '122270672.15915837512841273885830.1591583751.1591618309.1591950695.3', '__jdb': '122270672.2.15915837512841273885830|3.1591950695', '__jdc': '122270672', '__jdu': '15915837512841273885830', '__jdv': '122270672|direct|-|none|-|1591583751285', 'areaId': '1', 'cn': '0', 'ipLoc-djd': '1-2810-0-0', 'shshshfp': 'd8992e8bfebfe3c7a8032e3280551df5', 'shshshfpa': '24132765-f864-8ff0-f471-63c3d8b9a6a7-1591583752', 'shshshfpb': 'aruh0RdIRf4%2FPER%2FFZuxk0A%3D%3D', 'user-key': '0d65262e-f79f-48bd-bb6b-f8b6d1c7b8bb', 'wlfstk_smdl': 'mxmyvw8xipnlb9sqobzo91nc2fhk4snr', 'o2-webp': 'true', 'csn': '2', 'cud': '5a6f7aa08524943733422b52b3694f7d', 'cvt': '3', 'search_uuid': '50817507-eb52-48f4-8583-ab53586663db', 'UM_distinctid': '17293d86108766-0def340fcd9668-1b386257-1aeaa0-17293d86109c2d', 'JSESSIONID': '99FD306A7A7996B8206BF6856A2EF598.s1', '4qkvs9tyc7mc798e05815919506944982def': '62', '_c_id': 'ma724nleokg2bgcpne91591950694498a0zf', '_s_id': '4qkvs9tyc7mc798e05815919506944982def', '_t': 'fLEuJHDASFtzjkXZNtHuMAo6Az444DAOdm9mnLYfUd0=', 'alc': 'E9n+gTusBHGnP9RcLicpyA==', 'QRCodeKey': 'AAEAIFij9o7FEY9HoII7tXO-ZSADg4gdCztj2hINB76TPMk6', 'CNZZDATA1274300181': '1031549518-1591617385-%7C1591617385'}
         try:
             response = requests.get(url, headers=self.headers, 
                                     proxies=self.proxies, 
                                     timeout=self.timeout,
-                                    cookies=cookies)
+                                    )
             logger.info(f'response:{response.status_code}, {response.text[:20]}')
             
             # 返回空数据，更改proxy，重试，这个比cookie重要
@@ -76,7 +76,7 @@ class Downloader:
                     response = requests.get(url, headers=self.headers, 
                                     proxies=proxies, 
                                     timeout=self.timeout,
-                                    cookies=cookies)
+                                    )
                     logger.info(f'！！重试->{self.num_retries}:response:{response.status_code}, {response.text[:20]}')
                     self.num_retries -= 1
 
