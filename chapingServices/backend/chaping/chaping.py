@@ -233,6 +233,7 @@ def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
         } 
     # ADD proxy
     proxy = get_proxy().get("proxy")
+    logger.info(f'-> download {task_id} with proxy: {proxy}')
 
     delay = random.randint(2,8)
     # spider = ItemCommentSpider(headers=headers, delay=delay, task_id=task_id, token=db_name)
