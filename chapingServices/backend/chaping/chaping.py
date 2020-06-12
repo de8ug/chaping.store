@@ -76,7 +76,7 @@ class Downloader:
                     logger.info(f'!!update proxy:{proxy}')
                     logger.info(f'！！重试->{self.num_retries}:response:{response.status_code}, <{response.text[:20]}>')
                     self.num_retries -= 1
-                    html = self.download(url)
+                    html = self.download(url, is_json)
 
             if response.status_code == 200 and response.content:
                 if is_json:
@@ -92,7 +92,7 @@ class Downloader:
                 print('error code:', code)
                 if self.num_retries > 0 and 500 <= code < 600:
                     # 遇到5XX 的错误就重试
-                    html = self.download(url)
+                    html = self.download(url, is_json)
                     self.num_retries -= 1
             else:
                 code = None
