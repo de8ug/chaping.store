@@ -67,7 +67,7 @@ class TaskApi(Resource):
         url = args['url']
 
         token = create_token_by_url(url)
-        logger.debug(url, token)
+        logger.debug(url)
         result = {'status': 0, 'statusText': '创建成功', 'token': token}
 
         # save token and hot words
