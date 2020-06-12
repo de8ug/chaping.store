@@ -83,6 +83,7 @@ const statusApi = '/api/v1/status'
               clearInterval(this.timer)
             }
           }, 5000)
+        this.updateStatus();  // make sure all update   
       },
       destroyed () {
           clearInterval(this.timer)
