@@ -3,6 +3,7 @@
 # 爬取评论数据，并对差评进行分析
 
 import json
+import os
 import re
 import time
 import random
@@ -60,6 +61,9 @@ class Downloader:
         try:
             response = requests.get(url, headers=self.headers, proxies=self.proxies, timeout=self.timeout)
             print(response.status_code)
+            if not os.path.exists('response.html'):  # save one file to check
+                with open('response.html', 'w') as f:
+                    f.write(response.text)
 
             if response.status_code == 200 and response.content:
                 if is_json:
