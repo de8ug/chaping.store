@@ -7,12 +7,13 @@ from flask_httpauth import HTTPTokenAuth
 from celery import Celery
 import pymongo
 
-from chaping.utils import create_token_by_url
+from chaping.utils import create_token_by_url, de8ug_log
 from chaping.task import create_task
 from chaping.chaping import download_all
 from chaping.status import ResultStatus, redis_db1
 from chaping.analysis_jd import get_result
-from settings import mongo_params, tokens, ce_broker, de8ug_log
+from settings import mongo_params, tokens, ce_broker
+
 
 
 app = Flask(__name__)

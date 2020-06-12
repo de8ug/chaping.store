@@ -21,7 +21,7 @@ from .task import create_task
 from .headers import get_header_ua
 from .timeit import DecoTime
 from .status import *  # 确认一下啥时候用*
-from ..settings import de8ug_log
+from .utils import de8ug_log
 
 logger = de8ug_log()
 
