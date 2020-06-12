@@ -102,7 +102,7 @@ class StatusApi(Resource):
     @auth.login_required
     def get(self):
         token = request.args.get('token', '')
-        logger.debug(token)
+        logger.debug(f'checking status: {token}')
 
         if token:
             status = ResultStatus(token)

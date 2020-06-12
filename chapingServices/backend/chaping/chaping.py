@@ -66,11 +66,19 @@ class Downloader:
                                     proxies=self.proxies, 
                                     timeout=self.timeout,
                                     cookies=cookies)
-            logger.info(response.status_code)
-            if not os.path.exists('response.html'):  # save one file to check
-                logger.info('writing temp html')
-                with open('response.html', 'w') as f:
-                    f.write(response.text)
+            logger.info(f'response:{response.status_code}, {response.text[:20]}')
+            
+            # 返回空数据，更改proxy，重试，这个比cookie重要
+            if not response.text:  
+                proxy = get_proxy().get("proxy")
+                proxies = {"http": "http://{}".format(proxy)}
+                if self.num_retries > 0:
+                    response = requests.get(url, headers=self.headers, 
+                                    proxies=proxies, 
+                                    timeout=self.timeout,
+                                    cookies=cookies)
+                    logger.info(f'！！重试->{self.num_retries}:response:{response.status_code}, {response.text[:20]}')
+                    self.num_retries -= 1
 
             if response.status_code == 200 and response.content:
                 if is_json:
@@ -141,7 +149,7 @@ class Recorder:
 class ItemCommentSpider:
     """抓取商品评价信息
     """
-    def __init__(self, headers=None, num_retries=3, proxies=None, delay=2, timeout=30, task_id=None, token=''):
+    def __init__(self, headers=None, num_retries=5, proxies=None, delay=2, timeout=30, task_id=None, token=''):
         self.headers = headers
         self.num_retries = num_retries
         self.proxies = proxies
@@ -247,12 +255,13 @@ def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
         } 
     # ADD proxy
     proxy = get_proxy().get("proxy")
+    proxies = {"http": "http://{}".format(proxy)}
     logger.info(f'-> download {task_id} with proxy: {proxy}')
 
-    delay = random.randint(8,15)  # jd need more time
+    delay = random.randint(5, 10)  # jd need more time
     # spider = ItemCommentSpider(headers=headers, delay=delay, task_id=task_id, token=db_name)
     spider = ItemCommentSpider(headers=headers, 
-                                proxies={"http": "http://{}".format(proxy)},
+                                proxies=proxies,
                                 delay=delay, 
                                 task_id=task_id, 
                                 token=db_name.split('-')[-1]) # token根据db_name进行截取:db_name-token -> token
