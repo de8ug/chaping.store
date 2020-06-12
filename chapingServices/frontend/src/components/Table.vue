@@ -27,13 +27,14 @@
         
         <el-table-column
         prop="_id"
-        label="id"
+        label="商品id"
         width="180">
         </el-table-column>
         <el-table-column
         align="center"
         prop="status"
         label="状态值"
+        :formatter="formatter"
         >
         </el-table-column>
         <el-table-column
@@ -124,7 +125,7 @@ const statusApi = '/api/v1/status'
       //   this.$refs.filterTable.clearFilter();
       // },
       formatter(row) {
-        return row.status;
+        return row.status.toString();
       },
       filterTag(value, row) {
         return row.statusText === value;

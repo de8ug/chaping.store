@@ -73,10 +73,10 @@ class Downloader:
                 proxy = get_proxy().get("proxy")
                 self.proxies = {"http": "http://{}".format(proxy)}
                 if self.num_retries > 0:
-                    html = self.download(url)
                     logger.info(f'!!update proxy:{proxy}')
                     logger.info(f'！！重试->{self.num_retries}:response:{response.status_code}, <{response.text[:20]}>')
                     self.num_retries -= 1
+                    html = self.download(url)
 
             if response.status_code == 200 and response.content:
                 if is_json:
