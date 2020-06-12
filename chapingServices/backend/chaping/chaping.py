@@ -238,7 +238,7 @@ def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
         "sec-fetch-mode": "navigate",
         "sec-fetch-site": "same-site",
         "sec-fetch-user": "?1",
-        "upgrade-insecure-requests": 1"
+        "upgrade-insecure-requests": "1"
         } 
     # ADD proxy
     proxy = get_proxy().get("proxy")
