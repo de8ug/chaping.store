@@ -38,7 +38,7 @@ def verify_token(token):
 celery = Celery(app.name, broker=ce_broker)
 
 # log
-logger = de8ug_log()
+logger = de8ug_log(__name__)
 
 # 调用download_all(task_list, save_type='csv', db_client=None, db_name='chaping'):
 @celery.task

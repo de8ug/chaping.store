@@ -24,7 +24,7 @@ from .status import *  # 确认一下啥时候用*
 from .utils import de8ug_log, get_proxy, delete_proxy
 
 
-logger = de8ug_log()
+logger = de8ug_log(__name__)
 
 
 class Throttle:
