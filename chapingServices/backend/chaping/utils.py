@@ -36,7 +36,7 @@ def de8ug_log(logger_name='== DE8UG-LOG ==', log_file='logs/de8ug.log', level=lo
     fh = logging.FileHandler(filename=log_file, encoding='utf-8')
 
     # 创建 formatter
-    formatter = logging.Formatter('%(asctime)s == %(filename)s [line:%(lineno)d] %(name)s %(levelname)s == %(message)s')
+    formatter = logging.Formatter('%(asctime)s == %(filename)s [line:%(lineno)d] %(threadName)s %(levelname)s == %(message)s')
 
     # 添加 formatter
     ch.setFormatter(formatter)
