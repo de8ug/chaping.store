@@ -24,8 +24,10 @@ def create_task(start_url):
                         proxies=proxies,
                         headers={'User-Agent': get_header_ua()})  # need headers
         if not r.text:
-            count -= 1
             delete_proxy(proxy)
+            count -= 1
+        else:
+            break
     if r.text:
         sp = BeautifulSoup(r.text, 'lxml')
         sku_list = [i['data-sku'] for i in sp.findAll(class_='gl-item')]
