@@ -88,25 +88,25 @@ class TaskApi(Resource):
             # 如果状态还在，则直接返回
             status = ResultStatus(token)
             token_status = status.show_all(task_pattern=f'{token}*')
-            has_status = False
             sku_list_left = []
             for s in token_status:
                 if s['_id'] not in sku_list:
                     # delete other sku when create task
                     status.delete_item(s['_id'])
-                if s.get('status') == 2:  # 内容为空，需从新爬取
-                    logger.debug(f'Get status: {s.get("status")},内容为空，需从新爬取')
-                    has_status = True
+                    continue  # check next one
+                if s.get('status') != 100:  # 有错误的数据，需从新爬取
+                    logger.debug(f'Get status: {s.get("status")},有错误的数据，需从新爬取')
                     sku_list_left.append(s.get('_id'))
-            if not has_status:
-                result, 200
 
-            # 执行异步任务
+            # 执行异步任务, 原有id没成功的 + 新加的id
             # 测试可以少一点
             # sku_list = sku_list[:5]
-            sku_list = list(set(sku_list_left + sku_list))
-            logger.info(f'开始异步执行任务...{len(sku_list)}个')
-            run_download.delay(sku_list, db_name='chaping-' + token)
+            list_in_status = [s['_id'] for s in token_status]
+            sku_list = sku_list_left + list(set(sku_list) - set(list_in_status))
+            if sku_list:
+                logger.info(f'开始异步执行任务...{len(sku_list)}个')
+                result['statusText'] = f'开始异步执行任务...{len(sku_list)}个'
+                run_download.delay(sku_list, db_name='chaping-' + token)
         else:
             result['status'] = 1
             result['statusText'] = '创建失败'
