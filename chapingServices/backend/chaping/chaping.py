@@ -88,7 +88,7 @@ class Downloader:
                     return response.json()
                 else:
                     return response.content
-            return None
+            # return None  # retry return to the end html
         except RequestException as e:
             print('error:', e.response)
             html = ''
