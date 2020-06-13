@@ -125,6 +125,7 @@ const statusApi = '/api/v1/status'
           tempList.push(item.statusText);
         }
         tempList = [...new Set(tempList)]
+        this.filterList = []  // clear first
         for (let item of tempList) {
           this.filterList.push({ text: item, value: item });
         }
