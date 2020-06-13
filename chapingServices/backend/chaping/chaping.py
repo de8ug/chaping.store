@@ -76,13 +76,18 @@ class Downloader:
             logger.info(f'[ {taskid} ] response:{response.status_code}, <{response.text[:20]}>')
             
             # 返回空数据，更改proxy，重试，这个比cookie重要
-            if not response.text and self.num_retries > 0:
-                    logger.info(f'[ {taskid} ] !!delete & update proxy:{proxy}')
-                    logger.info(f'[ {taskid} ] ！！重试->{self.num_retries}>>>>>')
-                    delete_proxy(proxy)
-                    self.num_retries -= 1
-                    html = self.download(url, is_json)
-
+            while not response.text and self.num_retries > 0:
+                logger.info(f'[ {taskid} ] !!delete & update proxy:{proxy}')
+                logger.info(f'[ {taskid} ] ！！重试-> 第 [{self.num_retries}] 次')
+                delete_proxy(proxy)
+                self.num_retries -= 1
+                response = requests.get(url, 
+                                        headers=self.headers, 
+                                        proxies=proxies, 
+                                        timeout=self.timeout,
+                                        )
+                logger.info(f'[ {taskid} ] 第 [{self.num_retries}] 次response:{response.status_code}, <{response.text[:20]}>')
+            
             if response.status_code == 200 and response.content:
                 if is_json:
                     return response.json()
