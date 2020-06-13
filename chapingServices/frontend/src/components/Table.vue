@@ -65,7 +65,6 @@ const statusApi = '/api/v1/status'
       return {
         tableData: [],
         filterList: [],
-        taskCount: sessionStorage.getItem('token-count'),
         percent: 0,
         countSuccess: 0,
         countFailed: 0,
@@ -110,7 +109,7 @@ const statusApi = '/api/v1/status'
           this.countFailed = res.data.length - this.countSuccess
           // 进度条百分比，这时候给%前面的数字
           let counting = this.tableData.filter(x => x.status!=1).length
-          this.percent = (counting / this.taskCount).toFixed(2) * 100
+          this.percent = (counting / this.tableData.length).toFixed(2) * 100
           // console.log(this.percent);
           
         }).catch(err => {

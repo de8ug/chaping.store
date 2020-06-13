@@ -132,7 +132,6 @@ const statusApi = '/api/v1/status'
             this.currentTask.token = res.data.token
             this.currentTask.count = res.data.sku_list.length
             sessionStorage.setItem('token', res.data.token)
-            sessionStorage.setItem('token-count', this.currentTask.count)
             this.$message({
               message: '恭喜你，' + res.data.statusText,
               type: 'success'
