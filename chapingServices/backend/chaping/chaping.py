@@ -172,11 +172,11 @@ class ItemCommentSpider:
         self.download = Downloader(headers, num_retries, proxies, delay, timeout)
         logger.info(f'[ {self.task_id} ] init item spider')
             
-    def get_max_page(self, url):
+    def get_max_page(self, url, max_page=10):
         url = url.format(0)
         data = self.download.download(url, is_json=True)
         if isinstance(data, dict):
-            return data["maxPage"]
+            return min(data["maxPage"], max_page)
         else:
             return 3
         
