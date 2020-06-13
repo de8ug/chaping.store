@@ -279,7 +279,7 @@ def download_all(task_list, save_type='csv', db_client=None, db_name='chaping'):
     # clear status db first
     token = db_name.split('-')[-1]
     status = ResultStatus(prefix=token)
-    status.delete()
+    # status.delete()  # 先考虑使用缓存时间
 
     with ThreadPoolExecutor(max_workers=5) as executor:
         future_to_id = {executor.submit(download_by_id, task_id, save_type, db_client, db_name): task_id for task_id in task_list}
@@ -287,7 +287,7 @@ def download_all(task_list, save_type='csv', db_client=None, db_name='chaping'):
             task_id = future_to_id[future]
             print(task_id, future.result())
 
-    print(f'共执行了{len(task_list)}个任务')
+    logger.info(f'共执行了{len(task_list)}个任务')
 
 
 @DecoTime()
