@@ -93,20 +93,20 @@ class Downloader:
                     return response.json()
                 else:
                     return response.content
-            # return None  # retry return to the end html
+            return None  # retry None if retry ends
         except RequestException as e:
-            print('error:', e.response)
+            logger.error(f'[ {taskid} ] 第 [{self.num_retries}] 次, {e.response}')
             html = ''
             if hasattr(e.response, 'status_code'):
                 code = e.response.status_code
-                print('error code:', code)
+                logger.error(f'error {code}')
                 if self.num_retries > 0 and 500 <= code < 600:
                     # 遇到5XX 的错误就重试
                     html = self.download(url, is_json)
                     self.num_retries -= 1
             else:
                 code = None
-        return html
+            return html
 
 
 class Recorder:
