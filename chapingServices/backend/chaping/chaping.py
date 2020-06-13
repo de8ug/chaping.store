@@ -277,6 +277,8 @@ def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
 
     url = 'https://sclub.jd.com/comment/productPageComments.action?productId=' + task_id + '&score=1&sortType=5&page={}&pageSize=10&isShadowSku=0&fold=1'
     max_page = spider.get_max_page(url)
+    logger.info(f'[ {task_id} ] 开始爬行。。。共{max_page}页')
+
     # print(len(ret))
     # return spider.fetch_data(url, f'db/db-{task_id}.csv', 0, 5, 1, Recorder('csv'))
     return spider.fetch_data(url, db_name,  0, max_page, 1, Recorder(save_type, db_client))
