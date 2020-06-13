@@ -84,7 +84,12 @@ class TaskApi(Resource):
 
         if sku_list:
             result['sku_list'] = sku_list  # SAVE FOR FRONT USE
-
+            
+            # 如果状态还在，则直接返回
+            status = ResultStatus(token)
+            has_status = status.show_all(task_pattern=f'{token}*')
+            if has_status:
+                result, 200
             # 执行异步任务
             # 测试可以少一点
             # sku_list = sku_list[:5]
