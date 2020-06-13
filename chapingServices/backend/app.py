@@ -91,8 +91,9 @@ class TaskApi(Resource):
             has_status = False
             for s in token_status:
                 if s.status == 2:  # 内容为空，需从新爬取
+                    logger.debug(f'Get status: {s.status},内容为空，需从新爬取')
                     has_status = True
-            if has_status:
+            if not has_status:
                 result, 200
             # 执行异步任务
             # 测试可以少一点
