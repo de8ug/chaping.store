@@ -91,6 +91,9 @@ class TaskApi(Resource):
             has_status = False
             sku_list_left = []
             for s in token_status:
+                if s['_id'] not in sku_list:
+                    # delete other sku when create task
+                    status.delete_item(s['_id'])
                 if s.get('status') == 2:  # 内容为空，需从新爬取
                     logger.debug(f'Get status: {s.get("status")},内容为空，需从新爬取')
                     has_status = True

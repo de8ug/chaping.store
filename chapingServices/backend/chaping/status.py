@@ -25,6 +25,9 @@ class ResultStatus:
     def delete(self):
         for task_name in redis_db0.keys(f'{self.prefix}-*'):
             redis_db0.delete(task_name)  # delete the same key name
+    
+    def delete_item(self, task_id):
+        redis_db0.delete(f'{self.prefix}-{task_id}')
 
     def save_status(self, task_id, status):
         redis_db0.set(f'{self.prefix}-{task_id}', json.dumps(status))
