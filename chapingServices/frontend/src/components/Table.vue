@@ -108,7 +108,7 @@ const statusApi = '/api/v1/status'
           this.countSuccess = this.tableData.filter(x => x.status==100).length
           this.countFailed = res.data.length - this.countSuccess
           // 进度条百分比，这时候给%前面的数字
-          let counting = this.tableData.filter(x => x.status!=1).length
+          let counting = this.tableData.filter(x => x.status>1).length
           this.percent = (counting / this.tableData.length).toFixed(2) * 100
           // console.log(this.percent);
           
