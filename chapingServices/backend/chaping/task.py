@@ -19,10 +19,22 @@ def create_task(start_url):
         proxy = get_proxy().get("proxy")
         logger.info(f'第[ {count} ]次 create task from {start_url}')
         proxies = {"http": "http://{}".format(proxy)}
-       
+        headers = {
+            'User-agent': get_header_ua(),
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+            "Connection": "keep-alive",
+            "cache-control": "max-age=0",
+            "dnt": "1",
+            "referer": "https://www.jd.com/allSort.aspx",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "same-site",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1"
+            } 
         r = requests.get(start_url, 
                         proxies=proxies,
-                        headers={'User-Agent': get_header_ua()})  # need headers
+                        headers=headers)  # need headers
         logger.info(f'第[ {count} ]次 response {r.text[:30]}')
         
         if not r.text:

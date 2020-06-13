@@ -235,7 +235,7 @@ class ItemCommentSpider:
 
         # if callback:
         #     callback(filename, ('creationTime', 'userClientShow', 'userLevelName', 'productSize', "productColor", 'saleValue', "content"), all_list)
-        if callback:
+        if callback and all_list:
             self.result['status'] = STATUS_SAVING
             self.result['statusText'] = '保存中'
             # self.status.save_status(self.task_id, self.result)
@@ -247,7 +247,9 @@ class ItemCommentSpider:
             else:
                 self.result['status'] = STATUS_SUCCESS
                 self.result['statusText'] = '成功'
-
+        else:
+            self.result['status'] = STATUS_SUCCESS
+            self.result['statusText'] = '暂无差评'
         self.status.save_status(self.task_id, self.result)
 
         return self.result
