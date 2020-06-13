@@ -150,7 +150,7 @@ class Recorder:
             if ret:
                 return {'status': 0, 'statusText': 'db saved'}
         except Exception as e:
-            print(e)
+            logger.error(e)
             return {'status': 1, 'statusText': 'db error'}
 
 
@@ -172,6 +172,14 @@ class ItemCommentSpider:
         self.download = Downloader(headers, num_retries, proxies, delay, timeout)
         logger.info(f'[ {self.task_id} ] init item spider')
             
+    def get_max_page(self, url):
+        url = url.format(0)
+        data = self.download.download(url, is_json=True)
+        if isinstance(data, dict):
+            return data["maxPage"]
+        else:
+            return 3
+        
     def get_comment_by_json(self, url):
         # http://sclub.jd.com/comment/productPageComments.action?productId=6946647&score=0&sortType=5&page=0&pageSize=10&isShadowSku=0&fold=1
 
@@ -218,7 +226,7 @@ class ItemCommentSpider:
         for page in range(page_start, page_end, page_offset):
             data_list, commentsSum = self.get_comment_by_json(url.format(page))
             all_list += data_list
-            print(f'完成第{page_num}页')
+            logger.info(f'完成第{page_num}/{page_end}页')
             page_num += 1
 
         # save commentsSum in sum- db name
@@ -268,10 +276,10 @@ def download_by_id(task_id, save_type='csv', db_client=None, db_name='chaping'):
                                 token=db_name.split('-')[-1]) # token根据db_name进行截取:db_name-token -> token
 
     url = 'https://sclub.jd.com/comment/productPageComments.action?productId=' + task_id + '&score=1&sortType=5&page={}&pageSize=10&isShadowSku=0&fold=1'
-    # ret = spider.get_comment_by_json(url)
+    max_page = spider.get_max_page(url)
     # print(len(ret))
     # return spider.fetch_data(url, f'db/db-{task_id}.csv', 0, 5, 1, Recorder('csv'))
-    return spider.fetch_data(url, db_name,  0, 5, 1, Recorder(save_type, db_client))
+    return spider.fetch_data(url, db_name,  0, max_page, 1, Recorder(save_type, db_client))
 
 
 @DecoTime()
