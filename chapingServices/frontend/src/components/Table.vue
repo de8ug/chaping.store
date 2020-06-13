@@ -125,6 +125,9 @@ const statusApi = '/api/v1/status'
           tempList.push(item.statusText);
         }
         tempList = [...new Set(tempList)]
+        tempList = tempList.filter((item)=>{
+            return item !== '爬取中'
+        });
         this.filterList = []  // clear first
         for (let item of tempList) {
           this.filterList.push({ text: item, value: item });
