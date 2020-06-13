@@ -23,6 +23,8 @@ def create_task(start_url):
         r = requests.get(start_url, 
                         proxies=proxies,
                         headers={'User-Agent': get_header_ua()})  # need headers
+        logger.info(f'第[ {count} ]次 response {r.text[:30]}')
+        
         if not r.text:
             delete_proxy(proxy)
             count -= 1
