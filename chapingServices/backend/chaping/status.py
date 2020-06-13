@@ -28,7 +28,7 @@ class ResultStatus:
 
     def save_status(self, task_id, status):
         redis_db0.set(f'{self.prefix}-{task_id}', json.dumps(status))
-        redis_db0.expire('{self.prefix}-{task_id}', 60*60*24)  # 缓存过期时间
+        redis_db0.expire(f'{self.prefix}-{task_id}', 60*60*24)  # 缓存过期时间
 
     def get_status(self, task_name):
         status = redis_db0.get(task_name)
