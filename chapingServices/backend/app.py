@@ -89,16 +89,20 @@ class TaskApi(Resource):
             status = ResultStatus(token)
             token_status = status.show_all(task_pattern=f'{token}*')
             has_status = False
+            sku_list_left = []
             for s in token_status:
                 if s.get('status') == 2:  # 内容为空，需从新爬取
                     logger.debug(f'Get status: {s.get("status")},内容为空，需从新爬取')
                     has_status = True
+                    sku_list_left.append(s.get('_id'))
             if not has_status:
                 result, 200
+
             # 执行异步任务
             # 测试可以少一点
             # sku_list = sku_list[:5]
-            logger.info('开始异步执行任务...')
+            sku_list = sku_list_left if sku_list_left else sku_list
+            logger.info(f'开始异步执行任务...{len(sku_list)}个')
             run_download.delay(sku_list, db_name='chaping-' + token)
         else:
             result['status'] = 1
