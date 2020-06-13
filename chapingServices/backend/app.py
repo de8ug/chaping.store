@@ -90,7 +90,7 @@ class TaskApi(Resource):
             token_status = status.show_all(task_pattern=f'{token}*')
             has_status = False
             for s in token_status:
-                if s.status == 2:  # 内容为空，需从新爬取
+                if s.get('status') == 2:  # 内容为空，需从新爬取
                     logger.debug(f'Get status: {s.status},内容为空，需从新爬取')
                     has_status = True
             if not has_status:
