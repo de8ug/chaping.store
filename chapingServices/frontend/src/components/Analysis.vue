@@ -190,7 +190,7 @@ export default {
             let result = this.productResults[i]
             let comm = this.sumResults[i]
             // console.log(comm)
-            if (comm) {
+            if (JSON.stringify(comm) !== '{}') {
               chartData.rows.push({
                 productId: comm.productId.toString() + '-' + result.name.slice(0,10),  // for short
                 commentCount: comm.commentCount,
