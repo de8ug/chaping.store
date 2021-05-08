@@ -31,7 +31,7 @@ echarts-china-provinces-pypkg==0.0.2
 echarts-countries-pypkg==0.1.4
 entrypoints==0.2.3
 et-xmlfile==1.0.1
-eventlet==0.25.0
+eventlet==0.31.0
 fake-useragent==0.1.11
 feedfinder2==0.0.4
 feedparser==5.2.1
