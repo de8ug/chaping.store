@@ -80,7 +80,7 @@ nbconvert==5.3.1
 nbformat==4.4.0
 newspaper3k==0.2.8
 nltk==3.4
-notebook==5.5.0
+notebook==6.4.12
 numpy==1.15.2
 openpyxl==2.4.1
 pandas==0.19.1
