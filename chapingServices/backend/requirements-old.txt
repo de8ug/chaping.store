@@ -76,7 +76,7 @@ mccabe==0.6.1
 mistune==0.8.3
 mongoengine==0.17.0
 monotonic==1.5
-nbconvert==5.3.1
+nbconvert==6.3.0
 nbformat==4.4.0
 newspaper3k==0.2.8
 nltk==3.4
